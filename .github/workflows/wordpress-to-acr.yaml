@@ -31,6 +31,20 @@ jobs:
     - name: Push WP image to ACR
       run: |
         docker push ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+    
+    # - name: Create Azure App Service Plan
+    #   run: |
+    #     az appservice plan create --name ${{ secrets.APP_SERVICE_PLAN_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP }} --sku B1 --is-linux
 
-    - name: logout of Azure
-      run: az logout             
+    - name: Create Azure Web App for Containers
+      run: |
+        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+
+    - name: Configure Web App with ACR
+      run: |
+        az webapp config container set --name ${{ secrets.APP_SERVICE_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP }} --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+
+    - name: Logout of Azure
+      run: az logout
+
+  
