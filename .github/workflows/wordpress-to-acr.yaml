@@ -1,0 +1,36 @@
+name: Push wordpress container on ACR
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v3
+    
+    - name: login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: login to ACR
+      run: |
+        az acr login --name ${{ secrets.ACR_NAME }}
+
+    - name: Pull WP image
+      run: |
+        docker pull wordpress:latest
+
+    - name: Tag WP image for ACR
+      run: |
+        docker tag wordpress:latest ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+
+    - name: Push WP image to ACR
+      run: |
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+
+    - name: logout of Azure
+      run: az logout             
