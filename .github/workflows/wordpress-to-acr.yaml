@@ -38,11 +38,11 @@ jobs:
 
     - name: Create Azure Web App for Containers
       run: |
-        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+        az webapp create --resource-group Tarun-RG --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
 
     - name: Configure Web App with ACR
       run: |
-        az webapp config container set --name ${{ secrets.APP_SERVICE_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP }} --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+        az webapp config container set --name ${{ secrets.APP_SERVICE_NAME }} --resource-group Tarun-RG --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
 
     - name: Logout of Azure
       run: az logout
