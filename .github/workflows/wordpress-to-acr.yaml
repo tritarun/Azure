@@ -34,7 +34,7 @@ jobs:
     
     - name: Create Azure App Service Plan
       run: |
-        az appservice plan create --name ${{ secrets.APP_SERVICE_PLAN_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP }} --sku B1 --is-linux
+        az appservice plan create --name ${{ secrets.APP_SERVICE_PLAN_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP }} --sku B1 --is-linux --location eastus
 
     - name: Create Azure Web App for Containers
       run: |
