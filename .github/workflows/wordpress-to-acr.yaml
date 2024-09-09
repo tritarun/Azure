@@ -34,7 +34,7 @@ jobs:
 
     - name: Create Azure Web App for Containers
       run: |
-        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name {{ secrets.ACR_NAME }}.azurecr.io/appsvc-tutorial-custom-image:latest
+        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/appsvc-tutorial-custom-image:latest
 
     - name: Configure Web App with ACR
       run: |
