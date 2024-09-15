@@ -26,7 +26,7 @@ jobs:
 
     - name: Create Resource Group
       run: |
-        az group create --name myResourceGroup --location eastus
+        az group create --name myResourceGroup --location westus2
 
     - name: Create Virtual Machine
       run: |
@@ -34,5 +34,6 @@ jobs:
           --resource-group myResourceGroup \
           --name myVM \
           --image Ubuntu2204 \
+          --size Standard_B1s \
           --admin-username azureuser \
           --generate-ssh-keys
