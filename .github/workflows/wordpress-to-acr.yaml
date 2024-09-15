@@ -1,4 +1,4 @@
-name: Push wordpress container on ACR
+name: Push WordPress container on ACR
 
 on:
   push:
@@ -14,11 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: checkout code
+    - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Login to Azure using OIDC
-      id: azure_login
       uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -29,6 +28,10 @@ jobs:
     - name: Login to ACR
       run: |
         az acr login --name ${{ secrets.ACR_NAME }}
+
+    - name: Verify Docker Login to ACR
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login ${{ secrets.ACR_NAME }}.azurecr.io -u ${{ secrets.AZURE_CLIENT_ID }} --password-stdin
 
     - name: Pull WP image
       run: |
