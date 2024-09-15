@@ -1,4 +1,4 @@
-name: Push WordPress container on ACR
+name: Create Azure VM
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-push:
+  create-vm:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,28 +23,16 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        federated-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Login to ACR
+    - name: Create Resource Group
       run: |
-        az acr login --name ${{ secrets.ACR_NAME }}
+        az group create --name myResourceGroup --location eastus
 
-    - name: Verify ACR Login
+    - name: Create Virtual Machine
       run: |
-        az acr repository list --name ${{ secrets.ACR_NAME }}
-
-    - name: Pull WP image
-      run: |
-        docker pull wordpress:latest
-
-    - name: Tag WP image for ACR
-      run: |
-        docker tag wordpress:latest ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
-
-    - name: Push WP image to ACR
-      run: |
-        docker push ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
-
-    - name: Create Azure Web App for Containers
-      run: |
-        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan ${{ secrets.APP_SERVICE_PLAN_NAME }} --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
+        az vm create \
+          --resource-group myResourceGroup \
+          --name myVM \
+          --image UbuntuLTS \
+          --admin-username azureuser \
+          --generate-ssh-keys
