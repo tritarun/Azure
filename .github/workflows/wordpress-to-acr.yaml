@@ -26,14 +26,32 @@ jobs:
 
     - name: Create Resource Group
       run: |
-        az group create --name myResourceGroup --location westus2
+        az group create --name MyResourceGroup --location eastus
 
-    - name: Create Virtual Machine
+    - name: Create a Virtual Network
+      run: |
+        az network vnet create --resource-group MyResourceGroup --name Vnet1 --subnet-name Subnet1
+
+    - name: Create a publica IP
+      run: |
+        az network public-ip create --resource-group MyResourceGroup --name MyPublicIP1
+
+    - name: Create a NSG
+      run: |
+        az network nsg create --resource-group MyResourceGroup --name MyNSG1
+
+    - name: Create a NIC
+      run: |
+        az network nic create --resource-group MyResourceGroup --name NIC1 --subnet Subnet1 --vnet-name Vnet1 --public-ip-address MyPublicIP1
+   
+    - name: Create VM
       run: |
         az vm create \
-          --resource-group myResourceGroup \
-          --name myVM \
-          --image Ubuntu2204 \
-          --size Standard_B1s \
-          --admin-username azureuser \
-          --generate-ssh-keys
+        --resource-group MyResourceGroup \
+        --name NewVM --image Ubuntu2204 \
+        --admin-username azureuser \
+        --admin-password MyPassword123 \
+        --nics NIC1 \
+        --size Standard_B1s \
+        --license-type None
+   
