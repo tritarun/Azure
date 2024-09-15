@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+
+permissions:
+      id-token: write
+      contents: read
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -34,7 +39,7 @@ jobs:
 
     - name: Create Azure Web App for Containers
       run: |
-        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan githubtestingplan --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name testinggithub.azurecr.io/wordpress:latest
+        az webapp create --resource-group ${{ secrets.RESOURCE_GROUP }} --plan ${{ secrets.APP_SERVICE_PLAN_NAME }} --name ${{ secrets.APP_SERVICE_NAME }} --deployment-container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/wordpress:latest
 
     - name: Logout of Azure
       run: az logout
