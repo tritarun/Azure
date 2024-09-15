@@ -26,7 +26,7 @@ jobs:
 
     - name: Create Resource Group
       run: |
-        az group create --name MyResourceGroup --location eastus
+        az group create --name MyResourceGroup --location CanadaCentral
 
     - name: Create a Virtual Network
       run: |
