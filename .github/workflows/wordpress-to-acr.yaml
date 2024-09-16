@@ -1,4 +1,4 @@
-name: Create Azure VM
+name: Create Azure Ubuntu VM
 
 on:
   push:
